@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f4ec">
+  <meta name="description" content="沿着海岸骑车，把喉囊里的鲜鱼投进小鹈鹕身旁的鱼筐。一款有海风、有取舍的 SVG 骑行小游戏。">
+  <title>鹈鹕慢行社 · 海岸投喂记</title>
+  <style>
+    :root{color-scheme:light;--paper:#f6f4ec;--ink:#294d47;--muted:#82917d;--line:#dce0d3;--orange:#d78059}
+    *{box-sizing:border-box} [hidden]{display:none!important}
+    body{margin:0;min-width:320px;min-height:100svh;background:var(--paper);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,summary:focus-visible{outline:3px solid var(--orange);outline-offset:4px}button:disabled{cursor:default;opacity:.45}
+    .page{width:min(1440px,calc(100% - 64px));margin:0 auto}.masthead{height:92px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}.brand-mark{width:42px;height:42px}.brand-name{margin:0;font-size:17px;letter-spacing:3px;font-weight:650}.brand-note{display:block;margin-top:4px;font-size:10px;letter-spacing:2px;color:var(--muted)}
+    .edition{display:flex;gap:13px;align-items:center;font-size:11px;letter-spacing:2px;color:#7f907a}.edition i{width:30px;height:1px;background:#c7cfbc}.edition b{font-weight:500;color:var(--ink)}
+    .postcard{overflow:hidden;border:1px solid #d8dfcc;border-radius:22px;background:#f0f0e3;box-shadow:0 16px 45px -32px #294d4740}
+    .scene{position:relative;height:clamp(520px,67svh,790px);overflow:hidden;isolation:isolate;background:#f0f0e3}.landscape{display:block;position:absolute;width:100%;height:100%;inset:0;overflow:visible;pointer-events:none}
+    .scene:focus{outline:none}
+    .briefing{position:absolute;z-index:3;left:4.2%;top:6.4%;width:380px}.eyebrow{font-size:10px;letter-spacing:3px;color:#859576;display:flex;align-items:center;gap:8px}.eyebrow:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--orange)}
+    h1{margin:18px 0 12px;font-family:"Songti SC","STSong",serif;font-size:48px;font-weight:600;line-height:1.3;letter-spacing:4px}.lede{margin:0;color:#7c8e79;font-size:12px;letter-spacing:1px;line-height:1.9}
+    .dispatch{margin-top:23px;display:flex;align-items:center;gap:12px}.primary{border:1px solid var(--ink);background:var(--ink);color:#faf6e6;border-radius:9px;padding:13px 22px;letter-spacing:2px;font-size:12px;transition:background .18s,transform .18s}.primary:hover{background:#416955}.primary:active{transform:translateY(1px)}
+    .dispatch-note{font-size:10px;line-height:1.9;color:#8b977e}.packing{margin-top:20px;display:flex;gap:7px;flex-wrap:wrap}.chip{border:1px solid #ccd5bf;background:#f8f7ecb8;border-radius:7px;padding:7px 10px;color:#8b967f;font-size:10px;letter-spacing:.5px}.chip[aria-pressed="true"]{background:#e0e7d2;border-color:#9bae8c;color:var(--ink)}.route-choice{margin-top:8px}.briefing-foot{margin:13px 0 0;font-size:10px;color:#929b83}
+    .world-note{position:absolute;right:34px;top:29px;display:flex;align-items:center;gap:8px;font-size:10px;color:#869577;letter-spacing:2px}.world-note svg{width:19px;height:19px}
+    .hud{position:absolute;z-index:2;inset:26px 30px auto;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;pointer-events:none}.hud-route{min-width:200px}.hud-eyebrow{font-size:10px;letter-spacing:2px;color:#829478}.hud-title{font-size:21px;font-family:"Songti SC","STSong",serif;letter-spacing:2px;margin:8px 0 13px}.stamina-row{display:flex;align-items:center;gap:10px;font-size:10px;color:#7f9277}.stamina-track{width:125px;height:5px;border-radius:8px;overflow:hidden;background:#dbe3cf}.stamina-fill{height:100%;background:#88a17a;transform-origin:left;transition:background .2s}.speed-number{display:inline-block;min-width:37px;font-variant-numeric:tabular-nums;color:#4e715d}.hud-stats{display:flex;gap:27px;background:#faf9efc9;border:1px solid #e1e5d5;border-radius:12px;padding:13px 20px;backdrop-filter:blur(6px)}.stat{text-align:center;min-width:40px}.stat-label{display:block;font-size:9px;color:#8b987f;letter-spacing:1px;margin-bottom:5px}.stat-value{font-family:Georgia,"Songti SC",serif;font-size:23px;font-weight:400;font-variant-numeric:tabular-nums}.stat-value small{font-size:13px;color:#9aa58b}.timer-urgent{color:#c67b53!important}
+    .delivery-tip{position:absolute;z-index:2;left:4%;bottom:23px;display:flex;align-items:center;gap:10px;color:#78916e;font-size:11px;letter-spacing:1px;pointer-events:none}.tip-dot{width:6px;height:6px;border-radius:50%;background:#9caf87}.delivery-tip[data-ready="true"]{color:#467452}.delivery-tip[data-ready="true"] .tip-dot{background:#56895a;box-shadow:0 0 0 5px #8fad7730}
+    .toast{position:absolute;z-index:4;left:50%;top:28%;transform:translate(-50%,-6px);opacity:0;pointer-events:none;padding:10px 19px;border:1px solid #c7d4b7;border-radius:30px;background:#fbfaefed;color:#527447;font-size:12px;letter-spacing:1px;transition:opacity .18s,transform .18s;white-space:nowrap}.toast.visible{opacity:1;transform:translate(-50%,0)}
+    .controls{min-height:90px;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:#faf9f2;border-top:1px solid #dbe0d1}.control-help{font-size:11px;letter-spacing:1px;margin:0 0 6px}.control-small{font-size:10px;color:#93a087;margin:0}.drive-controls{display:flex;align-items:center;gap:9px}.drive-button{border:1px solid #d6ddca;border-radius:9px;background:#f1f2e7;color:#638064;padding:11px 15px;font-size:11px;letter-spacing:1px;display:flex;align-items:center;gap:9px;touch-action:none;user-select:none;-webkit-user-select:none;transition:background .1s,transform .1s}.drive-button kbd{font-family:inherit;font-size:10px;border:1px solid #c5d0b9;padding:1px 5px;border-radius:4px;min-width:21px;text-align:center}.drive-button.active{background:#dbe5ce;transform:translateY(1px);border-color:#9fb58d}.throw-button{background:#d9845d;border-color:#d9845d;color:#fff9e8;min-width:120px;justify-content:center}.throw-button:hover{background:#cb7953}.throw-button kbd{border-color:#ebba98}.throw-button.active{background:#bd704c;border-color:#bd704c}.icon-button{width:38px;height:38px;border:1px solid #d9dfcf;background:transparent;border-radius:50%;display:grid;place-items:center;color:#839278;margin-left:6px}.icon-button svg{width:15px;height:15px}.icon-button:hover{background:#e9eddf}.separator{width:1px;height:25px;background:#dde2d1;margin:0 5px}
+    .journey{height:44px;display:flex;align-items:center;gap:15px;padding:0 26px;background:#f6f6eb;border-top:1px solid #e6e8db;font-size:9px;color:#93a083;letter-spacing:1px}.journey-track{position:relative;flex:1;height:2px;background:#dce3cf}.journey-fill{position:absolute;inset:0;width:0;background:#8ca67a}.journey-dots{position:absolute;inset:0}.journey-stop{position:absolute;width:7px;height:7px;background:#f6f6eb;border:1px solid #b4c3a2;border-radius:50%;top:-2.5px;transform:translateX(-50%)}.journey-stop.done{background:#8faa76;border-color:#8faa76}.journey-stop.missed{background:#d9b090;border-color:#d9b090}.journey-bike{position:absolute;left:0;top:-8px;transform:translateX(-50%);color:#4a7357;font-size:16px;line-height:1}
+    .footer{padding:19px 3px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;color:#93a087;font-size:10px;letter-spacing:1px}.footer p{margin:0}.howto{position:relative;text-align:right;max-width:520px;font-size:10px}.howto summary{cursor:pointer;color:#73886c}.howto p{line-height:1.9;margin-top:10px}.key-hint{font-size:9px;color:#a1aa94;margin-left:15px}
+    .scrim{position:absolute;z-index:5;inset:0;display:flex;align-items:center;justify-content:center;background:#e8eddf78;backdrop-filter:blur(5px);padding:20px}.result-card{width:390px;background:#faf8ec;border:1px solid #d1dac3;border-radius:20px;padding:30px;text-align:center;box-shadow:0 16px 60px #344f3d12}.result-stamp{display:inline-grid;place-items:center;width:58px;height:58px;border:1px solid #b9c9a7;border-radius:50%;color:#85a16f;font-size:27px;transform:rotate(-12deg)}.result-eyebrow{font-size:10px;letter-spacing:3px;color:#8c9b7a;margin-top:17px}.result-card h2{font-size:30px;font-family:"Songti SC","STSong",serif;letter-spacing:3px;font-weight:500;margin:10px 0}.result-copy{font-size:11px;line-height:1.9;color:#88977b;margin:0}.result-grid{display:grid;grid-template-columns:repeat(3,1fr);margin:24px 0;padding:17px 0;border-top:1px solid #dce2cf;border-bottom:1px solid #dce2cf;gap:8px}.result-grid b{display:block;font:25px Georgia,serif;margin-bottom:6px}.result-grid span{font-size:9px;color:#95a082}.result-actions{display:flex;justify-content:center;gap:9px}.secondary{border:1px solid #cdd8bf;background:transparent;border-radius:9px;color:#7d9271;padding:12px 16px;font-size:11px}.record{font-size:10px;color:#98a38b;margin:17px 0 0}.no-script{text-align:center;padding:12px;font-size:12px}
+    @media(max-width:1000px){.page{width:calc(100% - 36px)}.scene{height:570px}.briefing{width:330px;top:35px}h1{font-size:41px}.hud-stats{gap:16px;padding:12px 15px}.control-small{max-width:240px;line-height:1.7}.drive-button{padding:11px}.key-hint{display:none}.hud{inset:22px 24px auto}}
+    @media(max-width:680px){.page{width:calc(100% - 24px)}.masthead{height:77px}.brand-mark{width:35px;height:35px}.brand-name{font-size:15px;letter-spacing:2px}.brand-note{font-size:8px}.edition{font-size:9px;letter-spacing:1px}.edition>span,.edition i{display:none}.postcard{border-radius:16px}.scene{height:530px;min-height:0}.landscape{inset:auto 0 20px;height:74%;width:100%}.briefing{left:24px;top:28px;width:calc(100% - 48px)}h1{font-size:36px;line-height:1.25;letter-spacing:3px;margin:14px 0 9px}.lede{font-size:10px}.packing{margin-top:14px}.chip{font-size:9px;padding:6px 8px}.dispatch{margin-top:15px}.primary{padding:11px 18px;font-size:11px}.briefing-foot{font-size:9px;margin-top:10px}.world-note{right:22px;top:25px;font-size:9px}.world-note span{display:none}.hud{inset:20px 19px auto;display:block}.hud-title{font-size:19px;margin:6px 0 9px}.hud-stats{margin-top:17px;padding:12px 14px;gap:0;justify-content:space-between;border-radius:10px}.stat-value{font-size:22px}.hud-route{min-width:0}.stamina-row{gap:8px}.stamina-track{width:100px}.delivery-tip{left:22px;bottom:18px;font-size:10px;max-width:calc(100% - 44px);line-height:1.6}.toast{top:39%;font-size:10px;padding:9px 13px}.controls{padding:14px 15px;display:block}.control-help{font-size:10px;margin-bottom:5px}.control-small{max-width:none;font-size:9px}.drive-controls{margin-top:12px;gap:8px}.drive-button{padding:12px 10px;flex:1;justify-content:center;font-size:11px;gap:5px}.drive-button kbd{display:none}.throw-button{min-width:0;flex:1.3}.separator{display:none}.icon-button{flex:none;margin-left:0;width:34px;height:34px}.journey{padding:0 17px;height:39px;font-size:8px;gap:12px}.footer{padding:16px 2px 22px;font-size:9px;gap:12px}.howto{max-width:45%;font-size:9px}.result-card{padding:25px;width:350px}.result-card h2{font-size:27px}.scene[data-home="false"] .landscape{bottom:20px;height:64%}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}.scrim{backdrop-filter:none}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#294d47"/><path d="M12 31c-3-8 1-12 7-11 4 1 6 0 6-6 0-4 7-6 9-1 1 3-1 6-4 7 0 10-7 17-18 11Z" fill="#f5f2df"/><path d="m32 13 11 4-12 2Z" fill="#e8ad62"/><circle cx="31" cy="12.5" r="1" fill="#294d47"/><path d="M15 26q5 5 12 0" fill="none" stroke="#b9c7ae" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <div><p class="brand-name">鹈鹕慢行社</p><span class="brand-note">收集一些不着急的时刻</span></div>
+      </div>
+      <div class="edition"><span>第 002 期</span><i></i><b>海岸投喂记</b></div>
+    </header>
+    <main class="postcard">
+      <section id="scene" class="scene" data-home="true" aria-label="鹈鹕海岸投喂游戏">
+        <div id="briefing" class="briefing">
+          <div class="eyebrow">今日出发 · 鲜鱼与小鹈鹕</div>
+          <h1>沿着海风，<br>喂饱小鹈鹕。</h1>
+          <p class="lede">沿海骑行，把鲜鱼投进小鹈鹕身旁的鱼筐。<br>看准落点，留下一份饱饱的小期待。</p>
+          <div class="packing" role="group" aria-label="选择装载方式"><button class="chip" data-load="light" aria-pressed="true" type="button">轻装 · 10 条鱼</button><button class="chip" data-load="full" aria-pressed="false" type="button">满载 · 16 条鱼</button></div>
+          <div class="packing route-choice" role="group" aria-label="选择路线"><button class="chip" data-route="coast" aria-pressed="true" type="button">海堤线 · 风大，奖励高</button><button class="chip" data-route="grove" aria-pressed="false" type="button">林荫线 · 路长，恢复快</button></div>
+          <div class="dispatch"><button id="start-button" class="primary" type="button">带上鱼，出发 ↗</button><span class="dispatch-note">6 只小鹈鹕 · 日落前喂饱<br>一局约 2～3 分钟</span></div>
+          <p class="briefing-foot">路牌会提前报风；松开踩踏可恢复体力。</p>
+        </div>
+        <div id="world-note" class="world-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><span>晴，有一封海风来信</span></div>
+        <div id="hud" class="hud" hidden>
+          <div class="hud-route"><div id="route-label" class="hud-eyebrow">海堤线 / 第一趟投喂</div><p id="wind-label" class="hud-title">海风轻轻，准备出发</p><div class="stamina-row"><span>体力</span><div id="stamina-meter" class="stamina-track" role="progressbar" aria-label="剩余体力" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div id="stamina-fill" class="stamina-fill"></div></div><span class="speed-number"><span id="speed-number">0</span><small> km/h</small></span></div></div>
+          <div class="hud-stats"><div class="stat"><span class="stat-label">已投喂</span><b class="stat-value"><span id="delivered-number">0</span><small> / 6</small></b></div><div class="stat"><span class="stat-label">喉囊余鱼</span><b id="fish-number" class="stat-value">10</b></div><div class="stat"><span class="stat-label">今日收获</span><b id="score-number" class="stat-value">0</b></div><div class="stat"><span class="stat-label">距日落</span><b id="time-number" class="stat-value">3:00</b></div></div>
+        </div>
+                <svg class="landscape" viewBox="0 0 1440 820" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="scene-title scene-description">
+          <title id="scene-title">鹈鹕的海岸投喂</title>
+          <desc id="scene-description">鹈鹕骑着珊瑚橙自行车沿海送鱼。前方有固定在岸边的喂食台与等候的小鹈鹕。用 D 踩踏，A 刹车，空格投鱼，P 暂停。弧线末端变绿表示预计落点在筐口内。</desc>
+          <defs>
+            <g id="flying-fish" stroke="#4a6d5b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m-14 0-16-12 2 13-2 12Z" fill="#91b3a1"/>
+              <path d="M-20 0C-11-14 8-15 23-1 12 14-8 14-20 0Z" fill="#b9cfc0"/>
+              <path d="M-15 3Q2 12 19 2" fill="#f4efda" stroke="none"/>
+              <path d="m-4-10 4-8 9 8m-8 18 5 6 5-8" fill="#8eac94" stroke-width="1.7"/>
+              <path d="M6-7Q1 0 7 7m-19-7h6" fill="none" stroke="#87a48c" stroke-width="1.4"/>
+              <circle cx="13" cy="-2" r="2.1" fill="#375942" stroke="none"/><circle cx="13.5" cy="-2.5" r=".7" fill="#fff9e6" stroke="none"/>
+            </g>
+            <g id="coastal-trees" stroke="#9cac86" stroke-width="2" stroke-linecap="round">
+              <g transform="translate(290 600)"><path d="M0 0v-90m0 30-23-17m23-2 22-18" fill="none"/><path d="M0-122c-26-1-43 17-34 35-24 15-11 43 14 40 12 16 43 10 48-7 22-2 30-24 12-36 5-17-15-35-40-32Z" fill="#becdac" stroke="none"/></g>
+              <g transform="translate(1320 613) scale(.8)"><path d="M0 0v-90m0 30-23-17m23-2 22-18" fill="none"/><path d="M0-122c-26-1-43 17-34 35-24 15-11 43 14 40 12 16 43 10 48-7 22-2 30-24 12-36 5-17-15-35-40-32Z" fill="#bacba7" stroke="none"/></g>
+            </g>
+            <linearGradient id="sea-color" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#b9d2c1"/>
+              <stop offset="1" stop-color="#dce5cf"/>
+            </linearGradient>
+            <linearGradient id="pouch-color" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f3c575"/>
+              <stop offset="1" stop-color="#e6ad63"/>
+            </linearGradient>
+            <pattern id="paper-grain" width="7" height="7" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r=".6" fill="#405c44" opacity=".045"/>
+              <circle cx="5" cy="4" r=".5" fill="#ffffff" opacity=".35"/>
+            </pattern>
+            <g id="cloud" fill="#faf9ef">
+              <path d="M0 23c0-10 9-16 20-13C22-7 49-8 55 9c11-4 24 3 24 14Z"/>
+            </g>
+            <g id="islands">
+              <path d="M-100 452c115-24 162-57 230-58 73-2 89 27 144 30 41 2 49-15 89-15 52 1 73 27 142 42Z" fill="#cbd8bd"/>
+              <path d="M941 451c43-29 78-39 112-37 35 3 49 21 76 19 34-2 55-28 92-27 35 1 78 25 126 45Z" fill="#c0d0b6"/>
+              <path d="M1110 442c63-11 81-8 126 2" fill="none" stroke="#aabd9e" stroke-width="2" opacity=".4"/>
+            </g>
+            <g id="sea-ripples" fill="none" stroke="#f6f7e7" stroke-linecap="round">
+              <path d="M65 485h90m-43 15h25m180-21h54m165 35h110m-41 13h41m210-46h80m188 27h86m-33 13h22m168-34h105" stroke-width="2" opacity=".6"/>
+              <path d="M-20 549h121m56 18h59m158-21h125m334-8h42m164 20h123m210-10h88" stroke-width="2" opacity=".5"/>
+            </g>
+            <g id="spokes" stroke="#a9b7a0" stroke-width="1.7">
+              <path d="M0-84V84M-84 0H84M-59.4-59.4 59.4 59.4M-59.4 59.4 59.4-59.4M-32.1-77.6 32.1 77.6M-77.6-32.1 77.6 32.1M-77.6 32.1 77.6-32.1M-32.1 77.6 32.1-77.6"/>
+              <path d="M0-87v7" stroke="#294d47" stroke-width="3"/>
+            </g>
+            <g id="tire">
+              <circle r="99" fill="#e8e9d7" stroke="#2d4e47" stroke-width="11"/>
+              <circle r="92" fill="none" stroke="#fbf6e4" stroke-width="4"/>
+              <circle r="85" fill="none" stroke="#6f8471" stroke-width="1.5"/>
+            </g>
+            <g id="road-plants" stroke-linecap="round" stroke-linejoin="round">
+              <g fill="none" stroke="#c4c7a9" stroke-width="1.7"><path d="M65 726h12m218 64h8m71-77h11m182 18h6m94 55h13m193-68h10m130 66h8m122-57h13m190 48h9"/><path d="M94 789q5-4 10 0m448-78q6-4 12 0m272 11q4-4 9 0m218 79q5-4 10 0"/></g>
+              <g transform="translate(170 756)">
+                <path d="M0 0q-3-19-16-30M2 0q4-25 19-42M-2 0q-18-9-29-8M4 0q15-15 28-12" fill="none" stroke="#819874" stroke-width="3"/>
+                <path d="M-9-18q-19-16-17-5 3 10 17 5M10-21q-1-23 8-15 4 7-8 15" fill="#90a180"/>
+                <g transform="translate(22 -45)" fill="#e3b86e">
+                  <ellipse cy="-5" rx="3.6" ry="6"/><ellipse cy="5" rx="3.6" ry="6"/>
+                  <ellipse cx="-5" rx="6" ry="3.6"/><ellipse cx="5" rx="6" ry="3.6"/>
+                  <circle r="3.5" fill="#a78b57"/>
+                </g>
+              </g>
+              <g transform="translate(1230 760)">
+                <path d="M0 0q-2-23-13-34M0 0q7-22 21-30M3 0q19-9 30-7M-3 0q-13-8-23-6" fill="none" stroke="#879d78" stroke-width="3"/>
+                <path d="M-7-17q-17-20-18-9 0 10 18 9M12-19q-2-21 7-14 5 5-7 14" fill="#a0ae87"/>
+              </g>
+              <path d="m433 749 3-7m8 6 7-4m539 9 5-10m8 9 8-4" fill="none" stroke="#a4af8b" stroke-width="2.5"/>
+            </g>
+          </defs>
+
+          <path fill="#f0f0e3" d="M-2000 0H3440v820H-2000Z"/>
+          <circle cx="1190" cy="174" r="71" fill="#efcd91"/>
+          <circle cx="1190" cy="174" r="86" fill="none" stroke="#e9cfa1" stroke-width="1" opacity=".55"/>
+          <g id="clouds" opacity=".95">
+            <use href="#cloud" x="566" y="120" transform="scale(1.2)"/>
+            <use href="#cloud" x="1076" y="310" transform="scale(.78)"/>
+            <use href="#cloud" x="1375" y="115" transform="scale(.9)"/>
+          </g>
+          <g id="distant-birds" fill="none" stroke="#8da18e" stroke-width="2.5" stroke-linecap="round">
+            <path id="bird-a" d="M1041 297q10-11 20 0 10-11 20 0"/>
+            <path id="bird-b" d="M1117 327q7-8 14 0 7-8 14 0" opacity=".6"/>
+          </g>
+          <g id="island-layer"><use href="#islands" x="-1440"/><use href="#islands"/><use href="#islands" x="1440"/></g>
+          <path d="M-2000 448H0c250-6 461 6 720 0s450-5 720 0h2000v205H-2000Z" fill="url(#sea-color)"/>
+          <path d="M-2000 451H0c270-6 450 5 720-1s450-4 720-1h2000" fill="none" stroke="#b3c9b1" stroke-width="2"/>
+          <g id="ripples"><use href="#sea-ripples" x="-1440"/><use href="#sea-ripples"/><use href="#sea-ripples" x="1440"/></g>
+          <path d="M-2000 596H0c134-9 202 1 340 13s236 11 405 1 285-29 422-23 193 18 273 18h2000v91H-2000Z" fill="#dde4cc"/>
+          <path d="M-2000 624H0c119-17 246 19 381 18s286-12 439-8 321 13 620-5h2000v97H-2000Z" fill="#c5d0ac"/>
+          <path d="M-2000 645H0c194 2 327 22 539 20s387-15 558-8 248 11 343 8h2000v155H-2000Z" fill="#e7e6d1"/>
+          <path d="M-2000 656H0c174 1 380 25 563 19s372-13 555-4 250 8 322 7h2000" fill="none" stroke="#bac7a3" stroke-width="2"/>
+          <path d="M-2000 799H0c314 6 557-4 804-1s415 3 636-2h2000v24H-2000Z" fill="#d5ddbf"/>
+          <path id="road-marks" d="M-2000 767H3440" fill="none" stroke="#f9f7e7" stroke-width="4" stroke-dasharray="64 112" stroke-linecap="round"/>
+
+          <g id="grove-layer"><use href="#coastal-trees" x="-1440"/><use href="#coastal-trees"/><use href="#coastal-trees" x="1440"/></g>
+          <g id="finish-layer" stroke="#829376" stroke-linejoin="round" stroke-linecap="round">
+            <ellipse cx="0" cy="686" rx="160" ry="14" fill="#9bae871a"/>
+            <path d="M-56 672-32 419H34L61 672Z" fill="#f5f1dc" stroke-width="3"/>
+            <path d="m-43 538 85 14 6 43-95-14Z" fill="#cf9978" stroke="none"/>
+            <path d="M-32 420v-48h66v48" fill="#d4d9bc" stroke-width="3"/>
+            <path d="M-48 373 0 335l49 38Z" fill="#d29976" stroke-width="3"/>
+            <path d="M-43 422h86M-43 376h86M-11 379v35m22-35v35" fill="none" stroke-width="3"/>
+            <path d="M-13 672v-43q13-16 26 0v43" fill="#7c9475" stroke-width="2"/>
+            <path d="M-79 686H86" stroke-width="4"/>
+            <rect x="-108" y="704" width="215" height="35" rx="7" fill="#f6f1dd" stroke="#b4c3a1" stroke-width="2"/>
+            <text x="0" y="727" text-anchor="middle" fill="#6c875c" stroke="none" font-size="14" font-family="system-ui" letter-spacing="3">终点 · 海风灯塔</text>
+          </g>
+          <g id="supply-layer" stroke="#79906c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+            <ellipse cy="743" rx="102" ry="9" fill="#8da37b1a"/>
+            <path d="M-68 649v-42H68v42" fill="none"/>
+            <path d="m-83 609 16-32H66l18 32Z" fill="#a8bea0"/>
+            <path d="M-83 609v10q13 13 27 0 13 13 27 0 14 13 29 0 14 13 28 0 14 13 28 0 14 13 28 0v-10Z" fill="#e8ead6"/>
+            <rect x="-69" y="650" width="139" height="66" rx="5" fill="#d0bd94"/>
+            <path d="M-62 662H62M-62 703H62" stroke="#b4a780"/>
+            <circle cx="-43" cy="729" r="13" fill="#f1ecd8"/><circle cx="43" cy="729" r="13" fill="#f1ecd8"/>
+            <rect x="-65" y="631" width="130" height="28" rx="5" fill="#f6f1dc" stroke="#b0bf9c" stroke-width="1.5"/>
+            <text id="supply-label" x="0" y="650" text-anchor="middle" font-size="12" letter-spacing="2" font-family="system-ui" fill="#6e8960" stroke="none">半程补给 · 鲜鱼</text>
+            <use href="#flying-fish" transform="translate(-27 682) scale(.6)"/><use href="#flying-fish" transform="translate(24 685) scale(.6)"/>
+          </g>
+          <g id="station-backs"></g>
+          <!-- 喂食台、飞鱼和筐沿属于同一后景；主角最后绘制，经过时保持整体遮挡。 -->
+          <g id="projectile-world">
+            <path id="aim-path" fill="none" stroke="#a4b495" stroke-width="2" stroke-dasharray="3 9" stroke-linecap="round" opacity=".65"/>
+            <g id="aim-ring" fill="none" stroke="#a4b495" stroke-width="2"><ellipse rx="23" ry="7"/><path d="M-31 0h6m50 0h6" stroke-linecap="round"/></g>
+            <g id="fish-layer"></g>
+          </g>
+          <g id="station-fronts"></g>
+          <ellipse id="bike-shadow" cx="810" cy="763" rx="266" ry="15" fill="#8f9d771c"/>
+
+          <g id="riding-scene" stroke="#2d4e47" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(629 661)">
+              <use href="#tire"/>
+              <g id="rear-spokes"><use href="#spokes"/></g>
+              <circle r="8" fill="#f6f1dd" stroke-width="3"/>
+            </g>
+            <g transform="translate(986 661)">
+              <use href="#tire"/>
+              <g id="front-spokes"><use href="#spokes"/></g>
+              <circle r="8" fill="#f6f1dd" stroke-width="3"/>
+            </g>
+
+            <g id="far-leg">
+              <path id="far-leg-edge" d="M749 497Q821 531 749 635" fill="none" stroke-width="13"/>
+              <path id="far-leg-color" d="M749 497Q821 531 749 635" fill="none" stroke="#d0a260" stroke-width="7.5"/>
+              <g id="far-foot" transform="translate(760 646)">
+                <path d="M-15-15q-7 8-3 12L21-2q6-1 2-6L9-15q-9-7-24 0Z" fill="#d0a260" stroke-width="3"/>
+                <path d="m6-10 9 7m-17-7 6 7" fill="none" stroke="#9c864f" stroke-width="1.5"/>
+              </g>
+            </g>
+            <g id="far-pedal" transform="translate(760 646)"><path d="M-15 2H15" stroke="#294d47" stroke-width="7"/></g>
+
+            <path d="M533 630c13-53 48-79 96-79 47 0 83 27 97 77" fill="none" stroke-width="10"/>
+            <path d="M533 630c13-53 48-79 96-79 47 0 83 27 97 77" fill="none" stroke="#bac7ae" stroke-width="5.5"/>
+            <path d="m544 602 85 59m61-88-61 88" fill="none" stroke="#6d8370" stroke-width="2"/>
+
+            <path d="M629 649 801 620a27 27 0 0 1 4 54L629 674a12.5 12.5 0 0 1 0-25Z" fill="#d6d8bc" stroke="#667e64" stroke-width="2.5"/>
+            <path d="M630 654 802 627m-172 15 176 0" fill="none" stroke="#9aab87" stroke-width="1.5"/>
+
+            <g fill="none" stroke-width="16">
+              <path d="m629 661 119-141 57 127-176 14m119-141 203 1-146 126m147-145 34 159"/>
+              <path d="m629 661 119-141 57 127-176 14m119-141 203 1-146 126m147-145 34 159" stroke="#da805b" stroke-width="10"/>
+            </g>
+            <path d="m758 531 174 1" fill="none" stroke="#eaa584" stroke-width="2"/>
+            <path d="m748 520-13-41" stroke-width="10"/>
+            <path d="m748 520-13-41" stroke="#d5d6bf" stroke-width="5"/>
+            <path d="M703 477q19-10 39-4l23 1q12 1 11 10-2 8-16 8h-47q-17 0-17-8 0-5 7-7Z" fill="#35564b" stroke-width="3"/>
+            <path d="M706 480h48" stroke="#5b7660" stroke-width="2"/>
+
+            <path d="m951 503-9-41q-2-10 10-10h41q23 0 23 19 0 15-15 15h-8" fill="none" stroke-width="10"/>
+            <path d="m951 503-9-41q-2-10 10-10h41q23 0 23 19 0 15-15 15h-8" fill="none" stroke="#bfcaaf" stroke-width="5"/>
+            <path d="M973 452h24" stroke="#35564b" stroke-width="12"/>
+            <path d="M1000 487h-12" stroke="#35564b" stroke-width="10"/>
+            <path d="M993 456q51 26-15 96" fill="none" stroke="#6c8270" stroke-width="1.8"/>
+            <path d="m981 602 10 34" stroke="#edb68a" stroke-width="3"/>
+
+            <g transform="translate(805 647)">
+              <g id="chainring">
+                <circle r="27" fill="#f2edda" stroke-width="3.5"/>
+                <circle r="20" fill="#b5c0a2" stroke="#859778" stroke-width="1"/>
+                <path d="M0-18V18M-16-9 16 9M-16 9 16-9" stroke="#f5f0dc" stroke-width="5"/>
+              </g>
+              <path id="crank" d="M-43 0H43" fill="none" stroke-width="6"/>
+              <circle r="6" fill="#e0e2cb" stroke-width="2"/>
+            </g>
+
+            <g id="near-leg">
+              <path id="near-leg-edge" d="M749 497Q841 539 837 636" fill="none" stroke-width="14"/>
+              <path id="near-leg-color" d="M749 497Q841 539 837 636" fill="none" stroke="#edbb6a" stroke-width="8"/>
+              <g id="near-foot" transform="translate(848 647)">
+                <path d="M-15-15q-7 8-3 12L21-2q6-1 2-6L9-15q-9-7-24 0Z" fill="#edbb6a" stroke-width="3.2"/>
+                <path d="m6-10 9 7m-17-7 6 7" fill="none" stroke="#b28a4f" stroke-width="1.5"/>
+              </g>
+            </g>
+            <g id="near-pedal" transform="translate(848 647)"><path d="M-15 2H15" stroke="#294d47" stroke-width="7"/><path d="M-7 2H7" stroke="#a2b094" stroke-width="2"/></g>
+
+            <g id="pelican">
+              <path d="M703 421q-36-3-68-26 5 30 31 44-23-6-46-4 17 31 61 31" fill="#f7f4e2" stroke-width="4"/>
+              <path d="M641 416q14 18 34 21m-36 8q20 11 34 11" fill="none" stroke="#b7c1a9" stroke-width="2.5"/>
+
+              <path id="scarf-long" d="M839 327C802 317 779 301 751 312l-15 25 27-4c28 13 49 14 77 5Z" fill="#4b8070" stroke-width="3.5"/>
+              <path id="scarf-short" d="M835 333c-30 5-40 13-57 9l-10 22 23-3q30-4 51-19Z" fill="#386859" stroke-width="3"/>
+
+              <path d="M693 478c-32-22-34-67-16-98 18-30 51-39 79-28 25 9 41 14 56-4 13-16 14-43 12-70l55 19c-3 22 2 45-3 67-6 41-25 71-59 95-13 10-26 24-35 34-15 18-59 10-89-15Z" fill="#faf7e8" stroke-width="4.5"/>
+              <path d="M678 435q10 39 55 48 29 9 48-1c12-13 30-31 51-49 21-19 31-40 35-66-14 37-35 55-65 65-47 18-79 7-124 3Z" fill="#e6e6d0" stroke="none"/>
+              <path d="M829 289q-1 28-9 47" fill="none" stroke="#e2e2cd" stroke-width="6"/>
+              <path d="M800 463q-9 20-21 23" fill="none" stroke="#b6c0a7" stroke-width="2.5"/>
+
+              <path d="M825 323q23 11 52 2l-1 17q-27 10-53-2Z" fill="#4b8070" stroke-width="3.5"/>
+              <path d="m839 329 1 9" fill="none" stroke="#83a28c" stroke-width="2.5"/>
+              <path d="M827 327q-12-2-12 7 0 8 13 8l8-8Z" fill="#386859" stroke-width="3"/>
+
+              <g id="pelican-head">
+              <path d="M824 285c-2-38 11-62 38-63 32-1 56 18 53 45-1 17-16 29-36 30l-7 12-46-12Z" fill="#faf7e8" stroke="none"/>
+              <path d="M824 278c-2-34 11-55 38-56 32-1 56 18 53 45-1 17-16 29-36 30" fill="none" stroke-width="4.5"/>
+              <g id="lower-beak">
+              <path d="M914 267 1104 286c-47 38-92 57-133 45-33-9-53-33-57-64Z" fill="url(#pouch-color)" stroke-width="4"/>
+              <path d="M939 287q21 33 54 37" fill="none" stroke="#d79a55" stroke-width="2.5" opacity=".7"/>
+              </g>
+              <g id="upper-beak">
+              <path d="M909 247c45 0 134 17 196 34 11 3 13 8 2 10-48 0-116-9-192-13Z" fill="#ecb56a" stroke-width="4"/>
+              <path d="m931 257 143 25" fill="none" stroke="#f9d697" stroke-width="3"/>
+              <path d="m920 274 173 13" fill="none" stroke="#b58246" stroke-width="1.5"/>
+              </g>
+              <circle cx="887" cy="271" r="10" fill="#efd6b6" stroke="none" opacity=".65"/>
+              <g id="eye" transform="translate(891 249)">
+                <ellipse rx="5" ry="6" fill="#294d47" stroke="none"/>
+                <circle cx="1.5" cy="-2" r="1.5" fill="#ffffff" stroke="none"/>
+              </g>
+              <path d="M881 234q7-4 14 0" fill="none" stroke-width="2.5"/>
+
+              <path d="M842 223c-3-23 7-40 28-41 23-2 43 13 46 39Z" fill="#355f52" stroke-width="4"/>
+              <path d="M863 187q-11 13-8 32" fill="none" stroke="#72937a" stroke-width="6"/>
+              <path d="M841 220q37-7 75 0 21-5 32 5 2 5-6 6l-27-1q-39-10-73 0Z" fill="#3c6b5b" stroke-width="3.5"/>
+              <path d="M879 197q9-3 13 5-10 8-13-5Z" fill="#d4d9b6" stroke="none"/>
+
+              </g>
+              <path d="M717 388c30-16 64 0 87 29 27 35 93 38 165 51 10 2 15 9 9 17-5 6-13 4-20 1-65-3-113-12-155-33-28 14-64 9-82-7-19-16-24-43-4-58Z" fill="#f0efdc" stroke-width="4"/>
+              <path d="M719 401q27-12 55 15m-60 0q15-7 32-2m-27 18q15-4 32 2" fill="none" stroke="#b0bda4" stroke-width="2.5"/>
+              <path d="m955 474 14 4m-20 2 13 5" fill="none" stroke="#83977f" stroke-width="2"/>
+            </g>
+
+            <g id="breeze" fill="none" stroke="#a4b899" stroke-width="2" opacity=".65">
+              <path d="M597 325h45m-72 15h49m-18 15h22"/>
+            </g>
+          </g>
+
+          <g id="effect-layer"></g>
+          <path id="sunset-wash" d="M-2000 0H3440v820H-2000Z" fill="#e4a765" opacity="0" pointer-events="none"/>
+          <g id="foreground-plants"><use href="#road-plants" x="-1440"/><use href="#road-plants"/><use href="#road-plants" x="1440"/></g>
+          <path fill="url(#paper-grain)" d="M-2000 0H3440v645H-2000Z" pointer-events="none"/>
+        </svg>
+        <div id="delivery-tip" class="delivery-tip" data-ready="false"><span class="tip-dot"></span><span id="tip-text">鱼筐在前方，快乐在路上。</span></div>
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+        <div id="pause-panel" class="scrim" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden><div class="result-card"><div class="result-stamp">☀</div><div class="result-eyebrow">海风替你保管这一刻</div><h2 id="pause-title">歇一会儿。</h2><p class="result-copy">鱼还在，风景也在。<br>准备好了，我们接着送。</p><div class="result-actions" style="margin-top:24px"><button id="resume-button" class="primary" type="button">继续骑行 ↗</button><button id="pause-home" class="secondary" type="button">返回码头</button></div></div></div>
+        <div id="result-panel" class="scrim" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden><div class="result-card"><div class="result-stamp">✳</div><div class="result-eyebrow">来自小鹈鹕的饱饱回信</div><h2 id="result-title">这一趟，谢谢你呀。</h2><p id="result-copy" class="result-copy"></p><div class="result-grid"><div><b id="result-delivery">0 / 6</b><span>小鹈鹕吃饱</span></div><div><b id="result-score">0</b><span>这一趟得分</span></div><div><b id="result-accuracy">0%</b><span>投送命中率</span></div></div><div class="result-actions"><button id="again-button" class="primary" type="button">再送一趟 ↗</button><button id="home-button" class="secondary" type="button">重新装载</button></div><p id="record" class="record"></p></div></div>
+      </section>
+      <div class="controls"><div><p id="control-help" class="control-help">长喙一甩，小鹈鹕开饭。</p><p id="control-small" class="control-small">D 踩踏 · A 刹车 · 空格投鱼 · P 暂停</p></div><div class="drive-controls" role="group" aria-label="骑行和投鱼控制"><button id="brake-button" class="drive-button" type="button" disabled><kbd>A</kbd>刹车</button><button id="pedal-button" class="drive-button" type="button" disabled><kbd>D</kbd>踩踏</button><button id="throw-button" class="drive-button throw-button" type="button" disabled><kbd>空格</kbd>甩喙投鱼</button><span class="separator"></span><button id="pause-button" class="icon-button" type="button" aria-label="暂停游戏" disabled><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="1"/><rect x="9.5" y="3" width="2.5" height="10" rx="1"/></svg></button></div></div>
+      <div class="journey"><span>出发 · 码头</span><div class="journey-track"><div id="journey-fill" class="journey-fill"></div><div id="journey-dots" class="journey-dots"></div><span id="journey-bike" class="journey-bike" aria-hidden="true">▸</span></div><span>终点 · 灯塔</span></div>
+      <noscript><p class="no-script">请启用 JavaScript，开始这趟海岸投喂。</p></noscript>
+    </main>
+    <footer class="footer"><p>风景不必追赶，慢慢就会遇见。<span class="key-hint">无需联网 · 纪录保存在此浏览器</span></p><details class="howto"><summary>骑行小抄 ↗</summary><p>按住 D 或踩踏按钮加速，松开滑行恢复体力。按住 A 刹车；空格或投鱼按钮甩出一条鱼。弧线末端的圆圈是预计落点，落进筐口时会变绿。先减速再投更从容，快速连续投喂奖励更高。海堤得分多，林荫恢复快；每局 3 分钟。P 或 Esc 暂停。</p></details></footer>
+  </div>
+    <script>
+    (() => {
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      const svg = document.querySelector('.landscape');
+      const NS = 'http://www.w3.org/2000/svg';
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      const smooth = (value) => { const t = clamp(value, 0, 1); return t * t * (3 - 2 * t); };
+      const RIG = { x: -70, y: 190, scale: .72 };
+      const GRAVITY = 1400;
+      const THROW_SPEED = 510;
+      const THROW_UP = -220;
+      const RELEASE_AT = .18;
+      const MAX_TIME = 180;
+      const FIXED_STEP = 1 / 120;
+      const STATION_NAMES = ['海堤边的小鹈鹕', '码头边的小鹈鹕', '灯塔下的小鹈鹕', '草坡上的小鹈鹕', '海湾里的小鹈鹕', '归巢的小鹈鹕'];
+      const e = {};
+      ['scene','briefing','world-note','hud','route-label','wind-label','stamina-meter','stamina-fill','speed-number','delivered-number','fish-number','score-number','time-number','delivery-tip','tip-text','toast','pause-panel','result-panel','control-help','control-small','journey-fill','journey-dots','journey-bike','station-backs','station-fronts','projectile-world','fish-layer','effect-layer','aim-path','aim-ring','bike-shadow','riding-scene','pelican','pelican-head','lower-beak','upper-beak','rear-spokes','front-spokes','chainring','crank','road-marks','island-layer','ripples','foreground-plants','clouds','scarf-long','scarf-short','eye','bird-a','bird-b','distant-birds','breeze','grove-layer','finish-layer','supply-layer','supply-label','sunset-wash'].forEach((id) => e[id] = $(id));
+      const drive = { pedal: $('pedal-button'), brake: $('brake-button'), throw: $('throw-button'), pause: $('pause-button') };
+      const legs = ['far', 'near'].map((side) => ({ edge: $(`${side}-leg-edge`), color: $(`${side}-leg-color`), foot: $(`${side}-foot`), pedal: $(`${side}-pedal`) }));
+      const held = { pedal: new Set(), brake: new Set() };
+      const pulse = { pedal: 0, brake: 0 };
+      const preference = matchMedia('(prefers-reduced-motion: reduce)');
+      let reducedMotion = preference.matches;
+      let selection = { load: 'light', route: 'coast' };
+      let mode = 'home';
+      let game;
+      let projectiles = [];
+      let effects = [];
+      let runSeed = 1;
+      let visualTime = 0;
+      let previousTime = null;
+      let accumulator = 0;
+      let frameId = null;
+      let lastHudUpdate = -1;
+
+      function node(tag, attributes = {}, parent) {
+        const element = document.createElementNS(NS, tag);
+        for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+        if (parent) parent.appendChild(element);
+        return element;
+      }
+
+      function seeded(seed) {
+        let state = seed >>> 0;
+        return () => { state = (Math.imul(state, 1664525) + 1013904223) >>> 0; return state / 4294967296; };
+      }
+
+      function makeGame(seed) {
+        const random = seeded(seed);
+        const grove = selection.route === 'grove';
+        const full = selection.load === 'full';
+        const scale = grove ? 1.1 : 1;
+        return {
+          distance: 0, speed: 85, stamina: 100, time: 0, cadence: 0, delivered: 0,
+          fish: full ? 16 : 10, shots: 0, score: 0, combo: 0, maxCombo: 0,
+          route: selection.route, load: selection.load, length: 19400 * scale,
+          throwState: null, toastUntil: -1, supplied: false,
+          winds: Array.from({length: 15}, (_, i) => i === 0 ? 0 : [-1, 0, 1][Math.floor(random() * 3)]),
+          stations: [1650, 4600, 7800, 11100, 14500, 18000].map((position, index) => ({
+            position: (position + (index ? (random() - .5) * 350 : 0)) * scale,
+            rim: index === 0 ? 551 : [523, 550, 574][Math.floor(random() * 3)],
+            half: index === 0 ? 88 : 70, index, name: STATION_NAMES[index],
+            delivered: false, missed: false, hitAt: -10, dot: null,
+          })),
+        };
+      }
+
+      function buildStations() {
+        e['station-backs'].replaceChildren();
+        e['station-fronts'].replaceChildren();
+        e['journey-dots'].replaceChildren();
+        game.stations.forEach((station) => {
+          const { position: x, rim: y, half: w, index } = station;
+          const ground = 744 - y;
+          const babyX = w + 60;
+          const left = -w - 24;
+          const right = w + 114;
+          const back = node('g', { transform: `translate(${x} ${y})`, 'data-station-index': index }, e['station-backs']);
+          back.innerHTML = `
+            <ellipse cx="28" cy="${ground + 2}" rx="${w + 83}" ry="10" fill="#7891691a"/>
+            <g stroke="#788869" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M${-w + 5} 97V${ground}M${w + 87} 97V${ground}" fill="none" stroke-width="4"/>
+              <path d="M${left} 85H${right}v12H${left}Z" fill="#d3bf99" stroke-width="3"/>
+              <path d="M${left + 6} 91H${right - 6}" fill="none" stroke="#eee0be" stroke-width="2"/>
+              <path d="M${-w - 3} ${ground}h16m${w + 79} 0h16" stroke-width="3"/>
+              <path d="M${left - 17} ${ground}q-2-16-9-20m10 19q7-12 14-13" fill="none" stroke="#9baa83" stroke-width="2.5"/>
+              <path d="M${right + 7} ${ground - 2}q8-6 14 0m-57 4q5-4 10 0" fill="none" stroke="#b1b995" stroke-width="2"/>
+            </g>
+            <ellipse rx="${w}" ry="17" fill="#91a483" stroke="#637b59" stroke-width="3"/>
+            <ellipse rx="${w - 8}" ry="10" fill="#6e835e" opacity=".55"/>
+            <g class="customer" transform="translate(${babyX} 84)" role="img" aria-label="等待投喂的小鹈鹕" stroke="#506d53" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="0" cy="2" rx="33" ry="3" fill="#7f956526" stroke="none"/>
+              <g class="baby-feet">
+                <path d="m-17-26-3 22m32-22 5 22" fill="none" stroke-width="6"/>
+                <path d="m-17-26-3 22m32-22 5 22" fill="none" stroke="#e8b66d" stroke-width="3.3"/>
+                <path d="M-21-7q-7 2-12 7h29l-7-4-5-3ZM17-7q-7 2-12 7h29l-8-4-5-3Z" fill="#e8b66d" stroke-width="2"/>
+                <path d="m-20-4-2 3m39-3 2 3" fill="none" stroke="#bd9458" stroke-width="1.2"/>
+              </g>
+              <path d="M27-47q16-2 24-14-1 17-18 23l16-2q-10 17-30 13" fill="#f7f3df" stroke-width="3"/>
+              <path d="M-32-26c-20-13-18-35 8-47 8-9 2-16-9-19-21-8-20-34-2-44 22-12 44 3 39 24-2 12-9 19-4 31 5 9 21 7 34 18 21 17 3 38-19 41-16 5-33 3-47-4Z" fill="#fbf7e6" stroke-width="3.2"/>
+              <path d="M-35-42q16 18 41 16 22-2 29-17-11 23-35 23-22 0-35-15Z" fill="#e4e8d0" stroke="none"/>
+              <g class="baby-wing"><path d="M-15-62c16-10 37-1 43 16-16 13-39 7-43-16Z" fill="#e9ecd6" stroke-width="2.5"/><path d="M-10-55q14-5 26 7m-22 0 12 3" fill="none" stroke="#b5c4a2" stroke-width="1.7"/></g>
+              <path d="M-45-106-114-95c19 22 38 29 58 16 11-8 13-17 11-27Z" fill="#ecc281" stroke-width="2.8"/>
+              <path d="M-46-118q-36 5-71 21-6 3 1 4l70-8Z" fill="#efbc70" stroke-width="2.8"/>
+              <path d="m-53-108-45 10" fill="none" stroke="#f7d99e" stroke-width="2"/>
+              <path d="M-35-136q-2-8 4-12m2 9q4-6 9-5" fill="none" stroke="#718865" stroke-width="2"/>
+              <circle cx="-30" cy="-104" r="7" fill="#e7b9a0" stroke="none" opacity=".35"/>
+              <g class="baby-eye" transform="translate(-35 -120)"><ellipse rx="3.2" ry="4" fill="#35573f" stroke="none"/><circle cx="-1" cy="-1.3" r="1.1" fill="#fffbed" stroke="none"/></g>
+              <path d="M-41-129q5-3 10 0" fill="none" stroke-width="1.7"/>
+            </g>
+            <g class="feeding-hearts" transform="translate(${babyX - 25} -92)" fill="#cf9477" opacity="0">
+              <path d="M0 8C-24-6-13-20 0-9 13-20 24-6 0 8Z"/>
+              <path d="M22-6c-13-8-7-16 0-10 7-6 13 2 0 10Z" opacity=".65"/>
+              <path d="M-23 1c-10-6-5-13 0-8 5-5 10 2 0 8Z" opacity=".5"/>
+            </g>`;
+          const front = node('g', { transform: `translate(${x} ${y})`, 'data-station-index': index }, e['station-fronts']);
+          front.innerHTML = `<g class="basket" stroke="#637c59" stroke-width="3" stroke-linejoin="round">
+            <path d="M${-w} 1Q${-w + 2} 51 ${-w + 20} 72Q0 91 ${w - 20} 72Q${w - 2} 51 ${w} 1Q0 29 ${-w} 1Z" fill="#cad7b8"/>
+            <path d="M${-w + 9} 32Q0 51 ${w - 9} 32M${-w + 17} 59Q0 77 ${w - 17} 59" fill="none" stroke="#aec09a" stroke-width="2"/>
+            <path d="M${-w + 8} 5Q${-w + 6} 40 ${-w + 22} 61" fill="none" stroke="#e7ecd6" stroke-width="3"/>
+            <path d="M${-w} 0Q0 30 ${w} 0" fill="none" stroke="#f4e9c9" stroke-width="6"/>
+            <path class="basket-mark" d="M-15 46q11-13 23 0-12 13-23 0Zm23 0 9-7v14Z" fill="#d7a774" stroke="none"/>
+          </g>`;
+          const dot = document.createElement('span');
+          dot.className = 'journey-stop';
+          dot.style.left = `${x / game.length * 100}%`;
+          e['journey-dots'].appendChild(dot);
+          Object.assign(station, { back, front, basket: front.querySelector('.basket'),
+            basketMark: front.querySelector('.basket-mark'), customer: back.querySelector('.customer'),
+            wing: back.querySelector('.baby-wing'), eye: back.querySelector('.baby-eye'),
+            thanks: back.querySelector('.feeding-hearts'), babyX, dot });
+        });
+        e['finish-layer'].setAttribute('transform', `translate(${game.length + 450} 0)`);
+      }
+
+      function showToast(message, duration = 2.5) {
+        e.toast.textContent = message;
+        e.toast.classList.add('visible');
+        game.toastUntil = game.time + duration;
+      }
+
+      function clearInput() {
+        held.pedal.clear(); held.brake.clear(); pulse.pedal = 0; pulse.brake = 0;
+        drive.pedal.classList.remove('active'); drive.brake.classList.remove('active');
+      }
+
+      function updateControls() {
+        const active = mode === 'playing';
+        drive.pedal.disabled = !active;
+        drive.brake.disabled = !active;
+        drive.throw.disabled = !active || game.fish <= 0 || Boolean(game.throwState);
+        drive.pause.disabled = !active;
+        drive.throw.classList.toggle('active', active && Boolean(game.throwState));
+      }
+
+      function startRun(replay = false) {
+        if (!replay) runSeed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
+        game = makeGame(runSeed);
+        mode = 'playing';
+        clearInput(); projectiles = []; effects = [];
+        e['fish-layer'].replaceChildren(); e['effect-layer'].replaceChildren();
+        e.briefing.hidden = true; e['world-note'].hidden = true; e.hud.hidden = false;
+        e['pause-panel'].hidden = true; e['result-panel'].hidden = true;
+        e.scene.dataset.home = 'false';
+        e['route-label'].textContent = `${game.route === 'grove' ? '林荫线' : '海堤线'} / ${game.load === 'full' ? '满载出发' : '轻装出发'}`;
+        e['control-help'].textContent = '先踩踏，再找准那一只鱼筐。';
+        e['control-small'].textContent = '松开踩踏恢复体力；弧线末端变绿时，按空格投送。';
+        buildStations(); updateControls(); lastHudUpdate = -1;
+        showToast('第一站的鱼筐更宽，试着慢慢投一条。', 4);
+        e.scene.tabIndex = -1; e.scene.focus({ preventScroll: true });
+        schedule();
+      }
+
+      function goHome() {
+        mode = 'home'; clearInput();
+        game = makeGame(runSeed);
+        game.stations[0].position = 1220;
+        projectiles = []; effects = [];
+        e['fish-layer'].replaceChildren(); e['effect-layer'].replaceChildren();
+        e.briefing.hidden = false; e['world-note'].hidden = false; e.hud.hidden = true;
+        e['pause-panel'].hidden = true; e['result-panel'].hidden = true;
+        e.scene.dataset.home = 'true'; e.toast.classList.remove('visible');
+        e['control-help'].textContent = '长喙一甩，小鹈鹕开饭。';
+        e['control-small'].textContent = 'D 踩踏 · A 刹车 · 空格投鱼 · P 暂停';
+        buildStations(); updateControls();
+        e['tip-text'].textContent = '鱼筐在前方，快乐在路上。';
+        e['delivery-tip'].dataset.ready = 'false';
+        e['journey-fill'].style.width = '0%'; e['journey-bike'].style.left = '0%';
+        $('start-button').focus({ preventScroll: true });
+        render(); schedule();
+      }
+
+      function pause() {
+        if (mode !== 'playing') return;
+        mode = 'paused'; clearInput(); updateControls();
+        e['pause-panel'].hidden = false;
+        $('resume-button').focus({ preventScroll: true });
+        stopFrame();
+      }
+
+      function resume() {
+        if (mode !== 'paused') return;
+        mode = 'playing'; e['pause-panel'].hidden = true; updateControls();
+        e.scene.focus({ preventScroll: true }); schedule();
+      }
+
+      function finish(timedOut = false) {
+        if (mode !== 'playing') return;
+        mode = 'result'; clearInput();
+        const bonus = timedOut ? 0 : Math.round((MAX_TIME - game.time) * .8);
+        game.score += bonus;
+        let best = game.score;
+        let saved = false;
+        try {
+          const key = `pelican-courier-best-v1-${game.route}-${game.load}`;
+          best = Math.max(game.score, Number(localStorage.getItem(key)) || 0);
+          localStorage.setItem(key, String(best)); saved = true;
+        } catch { /* 隐私模式或本地文件禁用存储时，结算仍可正常使用。 */ }
+        $('result-title').textContent = game.delivered === 6 ? '每一只，都吃饱了。' : game.delivered >= 4 ? '小鹈鹕们说谢谢。' : '慢慢来，就会更准。';
+        $('result-copy').textContent = timedOut ? '日落了，小鹈鹕们要回巢啦。下次试着在逆风前多留一点体力。' : `已抵达灯塔。${bonus ? `准时抵达奖励 ${bonus} 分。` : ''}这一路，有 ${game.delivered} 只小鹈鹕吃到了鲜鱼。`;
+        $('result-delivery').textContent = `${game.delivered} / 6`;
+        $('result-score').textContent = String(game.score);
+        $('result-accuracy').textContent = `${game.shots ? Math.round(game.delivered / game.shots * 100) : 0}%`;
+        $('record').textContent = `${saved ? `同路线与装载最高纪录 ${best} 分 · ` : ''}最高连续投喂 ${game.maxCombo} 只`;
+        e['result-panel'].hidden = false; e.toast.classList.remove('visible');
+        updateControls(); updateHud(); render();
+        $('again-button').focus({ preventScroll: true }); stopFrame();
+      }
+
+      // 头部的预备、前送、张嘴与回位共用一条曲线，骑行时间轴不受打断。
+      function headPose(age) {
+        if (age === null) return { angle: 0, x: 0, y: 0, open: 0 };
+        if (age < .1) { const t = smooth(age / .1); return { angle: -5 * t, x: -8 * t, y: 2 * t, open: .2 * t }; }
+        if (age < .18) { const t = smooth((age - .1) / .08); return { angle: -5 + 10 * t, x: -8 + 21 * t, y: 2 - 3 * t, open: .2 + .8 * t }; }
+        const t = smooth((age - .18) / .47);
+        return { angle: 5 * (1 - t), x: 13 * (1 - t), y: -(1 - t), open: 1 - smooth((age - .21) / .25) };
+      }
+
+      function bodyBob() { return reducedMotion ? 0 : Math.sin(game.cadence * 2) * 1.7 * Math.min(1, game.speed / 70); }
+
+      function mouthPoint(pose = headPose(RELEASE_AT)) {
+        const r = pose.angle * Math.PI / 180;
+        const dx = 1107 - 855, dy = 286 - 293;
+        return { x: RIG.x + (855 + Math.cos(r) * dx - Math.sin(r) * dy + pose.x) * RIG.scale,
+          y: RIG.y + (293 + Math.sin(r) * dx + Math.cos(r) * dy + pose.y + bodyBob()) * RIG.scale };
+      }
+
+      function nextStation() { return game.stations.find((s) => !s.delivered && !s.missed); }
+      function flightTime(drop) { return (-THROW_UP + Math.sqrt(THROW_UP * THROW_UP + 2 * GRAVITY * Math.max(0, drop))) / GRAVITY; }
+
+      function throwFish() {
+        if (mode !== 'playing' || game.throwState) return;
+        if (game.fish <= 0) { showToast('喉囊空啦，骑到补给点可以再领两条。'); return; }
+        game.fish--; game.shots++;
+        game.throwState = { age: 0, released: false };
+        updateControls();
+      }
+
+      function releaseFish() {
+        const mouth = mouthPoint();
+        const group = node('g', {}, e['fish-layer']);
+        const trail = node('path', { fill: 'none', stroke: '#a4ba9b', 'stroke-width': 5, 'stroke-linecap': 'round', opacity: .2 }, group);
+        const sprite = node('g', {}, group);
+        const body = node('g', {}, sprite);
+        const use = node('use', { href: '#flying-fish' }, body);
+        const shadow = node('ellipse', { rx: 19, ry: 4, fill: '#617c5819' }, group);
+        group.insertBefore(shadow, trail);
+        projectiles.push({ x: game.distance + mouth.x, y: mouth.y, vx: THROW_SPEED + game.speed, vy: THROW_UP,
+          age: 0, state: 'flying', group, sprite, body, use, trail, shadow, history: [], landedAt: 0 });
+      }
+
+      function addEffect(x, y) {
+        const group = node('g', {}, e['effect-layer']);
+        const sparks = [];
+        if (!reducedMotion) {
+          for (let i = 0; i < 7; i++) sparks.push(node('path', { d: 'M-3 0H3M0-3V3', fill: 'none', stroke: i % 2 ? '#dca56c' : '#89a67a', 'stroke-width': 2, 'stroke-linecap': 'round' }, group));
+        }
+        effects.push({ group, sparks, x, y, born: game.time });
+      }
+
+      function hitStation(fish, station, x) {
+        station.delivered = true; station.hitAt = game.time;
+        station.dot.classList.add('done');
+        game.delivered++; game.combo++; game.maxCombo = Math.max(game.maxCombo, game.combo);
+        const precision = 1 - Math.abs(x - station.position) / station.half;
+        const moving = Math.round(Math.min(game.speed / 4, 50));
+        const fresh = game.time < station.position / 120 + 14 ? 25 : 0;
+        const points = Math.round((100 + precision * 40 + moving + (game.combo - 1) * 12 + fresh) * (game.route === 'coast' ? 1.2 : 1));
+        game.score += points;
+        fish.state = 'landed'; fish.landedAt = game.time; fish.x = x; fish.y = station.rim; fish.vx = 0;
+        fish.trail.setAttribute('d', ''); fish.shadow.setAttribute('opacity', 0);
+        addEffect(station.position, station.rim - 40);
+        showToast(`${station.name}吃饱啦！ +${points} 分${game.combo > 1 ? ` · 连续投喂 ${game.combo} 只` : ''}`);
+      }
+
+      // 鱼与鱼筐使用世界坐标；下降穿过筐口平面时插值，避免跨帧漏判。
+      function updateProjectiles(dt) {
+        projectiles.forEach((fish) => {
+          fish.age += dt;
+          if (fish.state === 'flying') {
+            const oldX = fish.x, oldY = fish.y;
+            fish.x += fish.vx * dt;
+            fish.y += fish.vy * dt + .5 * GRAVITY * dt * dt;
+            fish.vy += GRAVITY * dt;
+            if (fish.vy > 0) {
+              for (const station of game.stations) {
+                if (station.delivered || station.missed || oldY > station.rim || fish.y < station.rim) continue;
+                const t = (station.rim - oldY) / (fish.y - oldY);
+                const crossX = oldX + (fish.x - oldX) * t;
+                if (Math.abs(crossX - station.position) <= station.half - 8) { hitStation(fish, station, crossX); break; }
+              }
+            }
+            if (fish.state === 'flying' && fish.y >= 739) {
+              fish.state = 'missed'; fish.landedAt = game.time; fish.y = 739;
+              addEffect(fish.x, 709);
+              showToast('差一点，下次看准落点再出手。', 1.5);
+            }
+          }
+          if (fish.state === 'flying') {
+            fish.history.push([fish.x, fish.y]);
+            if (fish.history.length > 12) fish.history.shift();
+          }
+        });
+        projectiles = projectiles.filter((fish) => {
+          const keep = fish.state === 'flying' ? fish.age < 3 : game.time - fish.landedAt < .38;
+          if (!keep) fish.group.remove();
+          return keep;
+        });
+        effects = effects.filter((effect) => { const keep = game.time - effect.born < 1.3; if (!keep) effect.group.remove(); return keep; });
+      }
+
+      function windState() {
+        const section = Math.min(game.winds.length - 1, Math.floor(game.distance / 1700));
+        const wind = game.winds[section];
+        const strength = game.route === 'grove' ? .38 : 1;
+        return { section, wind, force: wind * strength, next: game.winds[Math.min(section + 1, game.winds.length - 1)], toNext: 1700 - game.distance % 1700 };
+      }
+
+      function update(dt) {
+        game.time += dt;
+        const wind = windState();
+        const pedalling = held.pedal.size > 0 || pulse.pedal > game.time;
+        const braking = held.brake.size > 0 || pulse.brake > game.time;
+        const capacity = game.load === 'full' ? 16 : 10;
+        const weight = game.fish / capacity;
+        const energy = smooth(game.stamina / 22);
+        const effort = .2 + .8 * energy;
+        const maxSpeed = ((game.load === 'full' ? 230 : 265) - weight * 16 + wind.force * 19) * (.32 + .68 * energy);
+        let acceleration = -9 - game.speed * .018 + wind.force * 13 - weight * 2;
+        if (pedalling && !braking) {
+          acceleration += (83 - weight * 8) * effort;
+          game.stamina = clamp(game.stamina - (5 + game.speed / 100 + weight) * dt, 0, 100);
+        } else {
+          game.stamina = clamp(game.stamina + (game.route === 'grove' ? 14 : 10) * dt, 0, 100);
+        }
+        if (braking) acceleration -= 260;
+        // 疲劳改变目标速度，通过阻力渐进减速，避免速度在阈值处突然跳变。
+        acceleration -= Math.max(0, game.speed - maxSpeed) * 3;
+        game.speed = clamp(game.speed + acceleration * dt, 0, 320);
+        game.distance += game.speed * dt;
+        if (pedalling && !braking) game.cadence += game.speed / (99 * 1.75 * RIG.scale) * dt;
+        if (game.throwState) {
+          game.throwState.age += dt;
+          if (!game.throwState.released && game.throwState.age >= RELEASE_AT) {
+            game.throwState.released = true; releaseFish();
+          }
+          if (game.throwState.age > .72) { game.throwState = null; updateControls(); }
+        }
+        updateProjectiles(dt);
+        for (const station of game.stations) {
+          if (!station.delivered && !station.missed && station.position + station.half < game.distance + mouthPoint().x - 20) {
+            station.missed = true; station.dot.classList.add('missed'); game.combo = 0;
+            showToast('错过这一只也没关系，前方还有小鹈鹕等你。');
+          }
+        }
+        if (!game.supplied && game.distance > game.length * .51) {
+          game.supplied = true; game.fish = Math.min(capacity, game.fish + 2);
+          game.stamina = Math.min(100, game.stamina + 25);
+          updateControls(); showToast('路边补给：收到 2 条鲜鱼，体力恢复 25。', 3);
+        }
+        if (game.time >= game.toastUntil) e.toast.classList.remove('visible');
+        drive.pedal.classList.toggle('active', pedalling);
+        drive.brake.classList.toggle('active', braking);
+        if (game.distance >= game.length || game.time >= MAX_TIME) finish(game.time >= MAX_TIME);
+      }
+
+      function drawLeg(leg, angle, bodyOffset) {
+        const pedalX = 805 + Math.cos(angle) * 43, pedalY = 647 + Math.sin(angle) * 43;
+        const hipX = 749, hipY = 490 + bodyOffset;
+        const ankleX = pedalX - 10, ankleY = pedalY - 12;
+        const dx = ankleX - hipX, dy = ankleY - hipY, distance = Math.hypot(dx, dy);
+        const along = (108 * 108 - 112 * 112 + distance * distance) / (2 * distance);
+        const outward = Math.sqrt(Math.max(0, 108 * 108 - along * along));
+        const kneeX = hipX + (dx * along + dy * outward) / distance;
+        const kneeY = hipY + (dy * along - dx * outward) / distance;
+        const path = `M${hipX} ${hipY}L${kneeX} ${kneeY}L${ankleX} ${ankleY}`;
+        leg.edge.setAttribute('d', path); leg.color.setAttribute('d', path);
+        leg.foot.setAttribute('transform', `translate(${pedalX} ${pedalY})`);
+        leg.pedal.setAttribute('transform', `translate(${pedalX} ${pedalY})`);
+      }
+
+      function renderAim() {
+        const station = nextStation();
+        const visible = mode === 'playing' && station && game.fish > 0;
+        e['aim-path'].setAttribute('visibility', visible ? 'visible' : 'hidden');
+        e['aim-ring'].setAttribute('visibility', visible ? 'visible' : 'hidden');
+        if (!visible) { e['delivery-tip'].dataset.ready = 'false'; return; }
+        const mouth = mouthPoint();
+        const time = flightTime(station.rim - mouth.y);
+        const startX = game.distance + mouth.x + game.speed * RELEASE_AT;
+        const vx = THROW_SPEED + game.speed;
+        const landingX = startX + vx * time;
+        let path = '';
+        for (let i = 0; i <= 24; i++) {
+          const t = time * i / 24;
+          path += `${i ? 'L' : 'M'}${startX + vx * t} ${mouth.y + THROW_UP * t + .5 * GRAVITY * t * t}`;
+        }
+        const ready = Math.abs(landingX - station.position) < station.half - 14;
+        const color = ready ? '#70985e' : '#a4b495';
+        e['aim-path'].setAttribute('d', path); e['aim-path'].setAttribute('stroke', color);
+        e['aim-ring'].setAttribute('transform', `translate(${landingX} ${station.rim})`);
+        e['aim-ring'].setAttribute('stroke', color);
+        e['aim-ring'].setAttribute('fill', ready ? '#8daa6b26' : 'none');
+        e['delivery-tip'].dataset.ready = String(ready);
+        const metres = Math.max(0, Math.round((station.position - game.distance - mouth.x) / 10));
+        e['tip-text'].textContent = ready ? '落点对准筐口了 · 空格，甩一条！' : `${station.name} · 前方 ${metres} 米${metres < 70 ? ' · 减速找准落点' : ''}`;
+      }
+
+      function updateHud() {
+        const wind = windState();
+        e['wind-label'].textContent = game.stamina < 9 ? '累啦，松开踩踏歇一歇' : wind.wind > 0 ? '顺风，借一点海的力气 →' : wind.wind < 0 ? '迎着风，留一点体力 ←' : '海风轻轻，慢慢向前';
+        const approaching = wind.toNext < 450 && wind.next !== wind.wind;
+        if (approaching && game.stamina >= 9) e['wind-label'].textContent += ` · 前方${wind.next > 0 ? '顺风' : wind.next < 0 ? '逆风' : '风平'}`;
+        e['stamina-fill'].style.transform = `scaleX(${game.stamina / 100})`;
+        e['stamina-fill'].style.background = game.stamina < 24 ? '#cc9865' : '#88a17a';
+        e['stamina-meter'].setAttribute('aria-valuenow', Math.round(game.stamina));
+        e['speed-number'].textContent = String(Math.round(game.speed * .085));
+        e['delivered-number'].textContent = String(game.delivered); e['fish-number'].textContent = String(game.fish);
+        e['score-number'].textContent = String(game.score);
+        const seconds = Math.max(0, Math.ceil(MAX_TIME - game.time));
+        e['time-number'].textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+        e['time-number'].classList.toggle('timer-urgent', seconds < 30);
+        const percentage = Math.min(100, game.distance / game.length * 100);
+        e['journey-fill'].style.width = `${percentage}%`; e['journey-bike'].style.left = `${percentage}%`;
+        if (!nextStation()) {
+          e['tip-text'].textContent = '小鹈鹕们都见过啦，沿着海岸骑到灯塔吧。';
+          e['delivery-tip'].dataset.ready = 'false';
+        } else if (game.fish === 0) {
+          e['tip-text'].textContent = game.supplied ? '喉囊空啦，带着小鹈鹕的回信去灯塔吧。' : '喉囊空啦，半程补给点还有两条鲜鱼。';
+        }
+      }
+
+      function render() {
+        const home = mode === 'home';
+        const time = visualTime;
+        const phase = home ? (reducedMotion ? 0 : time * 1.8) : game.cadence;
+        const offset = home ? Math.sin(phase * 2) * (reducedMotion ? 0 : 1.2) : bodyBob();
+        const distance = home ? 0 : game.distance;
+        // 所有接地物体共用相机位移；首页相机不动，地面与喂食台也一起保持静止。
+        const sceneryDistance = distance;
+        const degrees = phase * 180 / Math.PI;
+        const wheelDegrees = home ? degrees * 1.75 : distance / (99 * RIG.scale) * 180 / Math.PI;
+        const homeShift = home && matchMedia('(min-width: 681px) and (max-width: 1200px)').matches ? 200 : 0;
+        e['riding-scene'].setAttribute('transform', `translate(${RIG.x + homeShift} ${RIG.y}) scale(${RIG.scale})`);
+        e.pelican.setAttribute('transform', `translate(0 ${offset})`);
+        e['rear-spokes'].setAttribute('transform', `rotate(${wheelDegrees % 360})`);
+        e['front-spokes'].setAttribute('transform', `rotate(${wheelDegrees % 360})`);
+        e.chainring.setAttribute('transform', `rotate(${degrees % 360})`); e.crank.setAttribute('transform', `rotate(${degrees % 360})`);
+        drawLeg(legs[0], phase + Math.PI, offset); drawLeg(legs[1], phase, offset);
+        const pose = headPose(game.throwState ? game.throwState.age : null);
+        e['pelican-head'].setAttribute('transform', `translate(${pose.x} ${pose.y}) rotate(${pose.angle} 855 293)`);
+        e['lower-beak'].setAttribute('transform', `rotate(${pose.open * 11} 916 271)`);
+        e['upper-beak'].setAttribute('transform', `rotate(${-pose.open * 1.5} 913 258)`);
+        ['station-backs','station-fronts','projectile-world','effect-layer'].forEach((id) => e[id].setAttribute('transform', `translate(${-distance} 0)`));
+        e['finish-layer'].setAttribute('transform', `translate(${game.length + 450 - distance} 0)`);
+        e['supply-layer'].setAttribute('transform', `translate(${game.length * .51 + 740 - distance} 0)`);
+        e['supply-layer'].setAttribute('opacity', game.supplied ? .6 : 1);
+        e['supply-label'].textContent = game.supplied ? '补给已收到 · 加油' : '半程补给 · 鲜鱼';
+        e['bike-shadow'].setAttribute('cx', 510 + homeShift); e['bike-shadow'].setAttribute('cy', 744); e['bike-shadow'].setAttribute('rx', 204); e['bike-shadow'].setAttribute('ry', 10);
+        e['road-marks'].setAttribute('stroke-dashoffset', sceneryDistance % 176);
+        e['island-layer'].setAttribute('transform', `translate(${-((sceneryDistance * .018) % 1440)} 0)`);
+        e.ripples.setAttribute('transform', `translate(${-((sceneryDistance * .045) % 1440)} 0)`);
+        e['foreground-plants'].setAttribute('transform', `translate(${-(sceneryDistance % 1440)} 0)`);
+        e['grove-layer'].setAttribute('opacity', game.route === 'grove' ? '.75' : '.25');
+        e['grove-layer'].setAttribute('transform', `translate(${-((sceneryDistance * .16) % 1440)} 0)`);
+        const breeze = reducedMotion ? 0 : Math.sin(time * 4.5) * 6;
+        e['scarf-long'].setAttribute('d', `M839 327C802 317 779 ${301 + breeze} 751 ${312 + breeze}l-15 25 27-4c28 ${13 - breeze} 49 ${14 - breeze} 77 ${5 - breeze}Z`);
+        e['scarf-short'].setAttribute('d', `M835 333c-30 5-40 ${13 - breeze * .4}-57 ${9 - breeze * .4}l-10 22 23-3q30-4 51 ${-19 + breeze * .4}Z`);
+        e.clouds.setAttribute('transform', `translate(${reducedMotion ? 0 : Math.sin(time * .07) * 20} 0)`);
+        e['distant-birds'].setAttribute('transform', `translate(${reducedMotion ? 0 : Math.sin(time * .13) * 20} 0)`);
+        const flap = reducedMotion ? 0 : Math.sin(time * 2.1) * 4;
+        e['bird-a'].setAttribute('d', `M1041 ${297 - flap}q10 ${-11 + flap} 20 ${flap}q10-11 20 ${-flap}`);
+        e.breeze.setAttribute('opacity', home || game.speed > 45 ? .45 : 0);
+        const blink = time % 6.7;
+        const eyeScale = !reducedMotion && blink > 5.9 && blink < 6.14 ? Math.max(.08, Math.abs((blink - 6.02) / .12)) : 1;
+        e.eye.setAttribute('transform', `translate(891 249) scale(1 ${eyeScale})`);
+        e['sunset-wash'].setAttribute('opacity', home ? 0 : Math.max(0, (game.time / MAX_TIME - .65) * .2));
+        for (const station of game.stations) {
+          const age = game.time - station.hitAt;
+          const bounce = age >= 0 && age < .7 && !reducedMotion ? Math.sin(age * 21) * Math.exp(-age * 7) * 6 : 0;
+          station.basket.setAttribute('transform', `translate(0 ${bounce})`);
+          // 反应只作用于翅膀与眼睛，脚始终落在台面上。
+          const flutter = age >= 0 && age < 1.2 && !reducedMotion ? Math.sin(age * 19) * Math.exp(-age * 2) * 13 : 0;
+          station.wing.setAttribute('transform', `rotate(${flutter} -8 -54)`);
+          const babyBlink = (time + station.index * 1.37) % 6.1;
+          const babyEye = station.delivered && age < 1.1 ? .2 : !reducedMotion && babyBlink > 5.8 ? .18 : 1;
+          station.eye.setAttribute('transform', `translate(-35 -120) scale(1 ${babyEye})`);
+          station.thanks.setAttribute('transform', `translate(${station.babyX - 25} ${-92 - Math.min(2, age) * 7})`);
+          station.thanks.setAttribute('opacity', station.delivered && age < 3 ? Math.min(1, age * 8) : 0);
+          if (station.delivered) station.basketMark.setAttribute('fill', '#789769');
+        }
+        projectiles.forEach((fish) => {
+          let y = fish.y;
+          const landedAge = game.time - fish.landedAt;
+          if (fish.state === 'landed') y += landedAge * 160;
+          const rotation = fish.state === 'flying' ? Math.atan2(fish.vy, fish.vx) * 180 / Math.PI : 58;
+          fish.sprite.setAttribute('transform', `translate(${fish.x} ${y}) rotate(${rotation})`);
+          fish.body.setAttribute('transform', `scale(1 ${1 + (reducedMotion ? 0 : Math.sin(fish.age * 22) * .055)})`);
+          fish.trail.setAttribute('d', fish.state === 'flying' && !reducedMotion ? fish.history.map((p, i) => `${i ? 'L' : 'M'}${p[0]} ${p[1]}`).join(' ') : '');
+          fish.shadow.setAttribute('cx', fish.x); fish.shadow.setAttribute('cy', 742);
+          fish.shadow.setAttribute('rx', clamp(25 - (742 - y) / 30, 7, 25));
+          fish.group.setAttribute('opacity', fish.state === 'missed' ? Math.max(0, 1 - landedAge / .38) : 1);
+        });
+        effects.forEach((effect) => {
+          const age = game.time - effect.born;
+          effect.group.setAttribute('transform', `translate(${effect.x} ${effect.y})`);
+          effect.group.setAttribute('opacity', Math.min(1, age * 10) * Math.max(0, (1.3 - age) / .6));
+          effect.sparks.forEach((spark, i) => {
+            const angle = i / 7 * Math.PI * 2;
+            spark.setAttribute('transform', `translate(${Math.cos(angle) * age * 54} ${Math.sin(angle) * age * 34 - 15}) rotate(${i * 27 + age * 50})`);
+            spark.setAttribute('opacity', Math.max(0, 1 - age * 1.3));
+          });
+        });
+        renderAim();
+        if (mode === 'playing' && game.time - lastHudUpdate > .1) { updateHud(); lastHudUpdate = game.time; }
+      }
+
+      function frame(timestamp) {
+        frameId = null;
+        if (document.hidden || !['home','playing'].includes(mode)) return;
+        const dt = previousTime === null ? 0 : Math.min((timestamp - previousTime) / 1000, .05);
+        previousTime = timestamp;
+        if (!reducedMotion) visualTime += dt;
+        if (mode === 'playing') {
+          accumulator += dt;
+          while (accumulator >= FIXED_STEP && mode === 'playing') { update(FIXED_STEP); accumulator -= FIXED_STEP; }
+        }
+        render();
+        if (mode === 'playing' || (mode === 'home' && !reducedMotion)) frameId = requestAnimationFrame(frame);
+      }
+
+      function stopFrame() {
+        if (frameId !== null) cancelAnimationFrame(frameId);
+        frameId = null; previousTime = null; accumulator = 0;
+      }
+      function schedule() { stopFrame(); if (!document.hidden) frameId = requestAnimationFrame(frame); }
+
+      ['load','route'].forEach((kind) => {
+        document.querySelectorAll(`[data-${kind}]`).forEach((button) => button.addEventListener('click', () => {
+          selection[kind] = button.dataset[kind];
+          document.querySelectorAll(`[data-${kind}]`).forEach((option) => option.setAttribute('aria-pressed', String(option === button)));
+          game.route = selection.route; render();
+        }));
+      });
+      $('start-button').addEventListener('click', () => startRun());
+      $('again-button').addEventListener('click', () => startRun(true));
+      $('resume-button').addEventListener('click', resume);
+      $('home-button').addEventListener('click', goHome); $('pause-home').addEventListener('click', goHome);
+      drive.pause.addEventListener('click', pause); drive.throw.addEventListener('click', throwFish);
+
+      // 每个触点单独登记，支持手机同时按住踩踏并点按投鱼。
+      ['pedal','brake'].forEach((action) => {
+        const button = drive[action];
+        button.addEventListener('pointerdown', (event) => {
+          if (mode !== 'playing' || event.button !== 0) return;
+          event.preventDefault(); button.setPointerCapture(event.pointerId); held[action].add(event.pointerId);
+        });
+        ['pointerup','pointercancel','lostpointercapture'].forEach((type) => button.addEventListener(type, (event) => held[action].delete(event.pointerId)));
+        button.addEventListener('click', (event) => { if (event.detail === 0 && mode === 'playing') pulse[action] = game.time + .5; });
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input,textarea,select,[contenteditable]')) return;
+        const modal = mode === 'paused' ? e['pause-panel'] : mode === 'result' ? e['result-panel'] : null;
+        if (modal && event.key === 'Tab') {
+          const buttons = [...modal.querySelectorAll('button')];
+          if (event.shiftKey && document.activeElement === buttons[0]) { event.preventDefault(); buttons.at(-1).focus(); }
+          else if (!event.shiftKey && document.activeElement === buttons.at(-1)) { event.preventDefault(); buttons[0].focus(); }
+          return;
+        }
+        if ((event.code === 'KeyP' || event.code === 'Escape') && !event.repeat) {
+          if (mode === 'playing') { event.preventDefault(); pause(); }
+          else if (mode === 'paused') { event.preventDefault(); resume(); }
+          return;
+        }
+        if (mode !== 'playing') return;
+        if (event.code === 'KeyD' || event.code === 'ArrowRight') { event.preventDefault(); held.pedal.add(event.code); }
+        if (event.code === 'KeyA' || event.code === 'ArrowLeft') { event.preventDefault(); held.brake.add(event.code); }
+        if (event.code === 'Space' && !event.repeat && !event.target.closest('button,summary,a')) { event.preventDefault(); throwFish(); }
+      });
+      document.addEventListener('keyup', (event) => { held.pedal.delete(event.code); held.brake.delete(event.code); });
+      window.addEventListener('blur', () => { clearInput(); if (mode === 'playing') pause(); });
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) { if (mode === 'playing') pause(); else stopFrame(); }
+        else if (mode === 'home') schedule();
+      });
+      preference.addEventListener('change', (event) => { reducedMotion = event.matches; if (mode === 'home') { render(); schedule(); } });
+      const narrow = matchMedia('(max-width: 680px)');
+      function fitView() { svg.setAttribute('viewBox', narrow.matches ? '180 110 1260 710' : '0 0 1440 820'); svg.setAttribute('preserveAspectRatio', 'xMidYMax meet'); }
+      narrow.addEventListener('change', fitView); fitView();
+      game = makeGame(runSeed); game.stations[0].position = 1220;
+      buildStations(); updateControls(); render(); schedule();
+    })();
+  </script>
+
+</body>
+</html>

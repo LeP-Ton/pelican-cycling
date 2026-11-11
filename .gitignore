@@ -1,0 +1,9 @@
+# 本机文件与构建产物
+.DS_Store
+_site/
+node_modules/
+
+# 本机协作记录，保留在工作区
+.agentdocs/
+AGENTS.md
+CLAUDE.md
