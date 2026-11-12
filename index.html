@@ -16,6 +16,10 @@
     .edition{display:flex;gap:13px;align-items:center;font-size:11px;letter-spacing:2px;color:#7f907a}.edition i{width:30px;height:1px;background:#c7cfbc}.edition b{font-weight:500;color:var(--ink)}
     .postcard{overflow:hidden;border:1px solid #d8dfcc;border-radius:22px;background:#f0f0e3;box-shadow:0 16px 45px -32px #294d4740}
     .scene{position:relative;height:clamp(520px,67svh,790px);overflow:hidden;isolation:isolate;background:#f0f0e3}.landscape{display:block;position:absolute;width:100%;height:100%;inset:0;overflow:visible;pointer-events:none}
+    /* 色调覆盖完整场景，避免窄屏 SVG 周围的留白与画面出现分界。 */
+    .scene::before,.scene::after{content:"";position:absolute;z-index:1;inset:0;pointer-events:none}
+    .scene::before{background:#e4a765;opacity:var(--sunset-warmth,0)}
+    .scene::after{background:linear-gradient(180deg,#26334ed9 0%,#66516a99 52%,#243d5080 100%);opacity:var(--nightfall,0)}
     .scene:focus{outline:none}
     .briefing{position:absolute;z-index:3;left:4.2%;top:6.4%;width:380px}.eyebrow{font-size:10px;letter-spacing:3px;color:#859576;display:flex;align-items:center;gap:8px}.eyebrow:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--orange)}
     h1{margin:18px 0 12px;font-family:"Songti SC","STSong",serif;font-size:48px;font-weight:600;line-height:1.3;letter-spacing:4px}.lede{margin:0;color:#7c8e79;font-size:12px;letter-spacing:1px;line-height:1.9}
@@ -24,6 +28,7 @@
     .world-note{position:absolute;right:34px;top:29px;display:flex;align-items:center;gap:8px;font-size:10px;color:#869577;letter-spacing:2px}.world-note svg{width:19px;height:19px}
     .hud{position:absolute;z-index:2;inset:26px 30px auto;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;pointer-events:none}.hud-route{min-width:200px}.hud-eyebrow{font-size:10px;letter-spacing:2px;color:#829478}.hud-title{font-size:21px;font-family:"Songti SC","STSong",serif;letter-spacing:2px;margin:8px 0 13px}.stamina-row{display:flex;align-items:center;gap:10px;font-size:10px;color:#7f9277}.stamina-track{width:125px;height:5px;border-radius:8px;overflow:hidden;background:#dbe3cf}.stamina-fill{height:100%;background:#88a17a;transform-origin:left;transition:background .2s}.speed-number{display:inline-block;min-width:37px;font-variant-numeric:tabular-nums;color:#4e715d}.hud-stats{display:flex;gap:27px;background:#faf9efc9;border:1px solid #e1e5d5;border-radius:12px;padding:13px 20px;backdrop-filter:blur(6px)}.stat{text-align:center;min-width:40px}.stat-label{display:block;font-size:9px;color:#8b987f;letter-spacing:1px;margin-bottom:5px}.stat-value{font-family:Georgia,"Songti SC",serif;font-size:23px;font-weight:400;font-variant-numeric:tabular-nums}.stat-value small{font-size:13px;color:#9aa58b}.timer-urgent{color:#c67b53!important}
     .delivery-tip{position:absolute;z-index:2;left:4%;bottom:23px;display:flex;align-items:center;gap:10px;color:#78916e;font-size:11px;letter-spacing:1px;pointer-events:none}.tip-dot{width:6px;height:6px;border-radius:50%;background:#9caf87}.delivery-tip[data-ready="true"]{color:#467452}.delivery-tip[data-ready="true"] .tip-dot{background:#56895a;box-shadow:0 0 0 5px #8fad7730}
+    .hud-route,.delivery-tip{background:rgba(250,249,239,calc(var(--nightfall,0) * .92));box-shadow:0 0 0 10px rgba(250,249,239,calc(var(--nightfall,0) * .92));border-radius:5px}
     .toast{position:absolute;z-index:4;left:50%;top:28%;transform:translate(-50%,-6px);opacity:0;pointer-events:none;padding:10px 19px;border:1px solid #c7d4b7;border-radius:30px;background:#fbfaefed;color:#527447;font-size:12px;letter-spacing:1px;transition:opacity .18s,transform .18s;white-space:nowrap}.toast.visible{opacity:1;transform:translate(-50%,0)}
     .controls{min-height:90px;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:#faf9f2;border-top:1px solid #dbe0d1}.control-help{font-size:11px;letter-spacing:1px;margin:0 0 6px}.control-small{font-size:10px;color:#93a087;margin:0}.drive-controls{display:flex;align-items:center;gap:9px}.drive-button{border:1px solid #d6ddca;border-radius:9px;background:#f1f2e7;color:#638064;padding:11px 15px;font-size:11px;letter-spacing:1px;display:flex;align-items:center;gap:9px;touch-action:none;user-select:none;-webkit-user-select:none;transition:background .1s,transform .1s}.drive-button kbd{font-family:inherit;font-size:10px;border:1px solid #c5d0b9;padding:1px 5px;border-radius:4px;min-width:21px;text-align:center}.drive-button.active{background:#dbe5ce;transform:translateY(1px);border-color:#9fb58d}.throw-button{background:#d9845d;border-color:#d9845d;color:#fff9e8;min-width:120px;justify-content:center}.throw-button:hover{background:#cb7953}.throw-button kbd{border-color:#ebba98}.throw-button.active{background:#bd704c;border-color:#bd704c}.icon-button{width:38px;height:38px;border:1px solid #d9dfcf;background:transparent;border-radius:50%;display:grid;place-items:center;color:#839278;margin-left:6px}.icon-button svg{width:15px;height:15px}.icon-button:hover{background:#e9eddf}.separator{width:1px;height:25px;background:#dde2d1;margin:0 5px}
     .journey{height:44px;display:flex;align-items:center;gap:15px;padding:0 26px;background:#f6f6eb;border-top:1px solid #e6e8db;font-size:9px;color:#93a083;letter-spacing:1px}.journey-track{position:relative;flex:1;height:2px;background:#dce3cf}.journey-fill{position:absolute;inset:0;width:0;background:#8ca67a}.journey-dots{position:absolute;inset:0}.journey-stop{position:absolute;width:7px;height:7px;background:#f6f6eb;border:1px solid #b4c3a2;border-radius:50%;top:-2.5px;transform:translateX(-50%)}.journey-stop.done{background:#8faa76;border-color:#8faa76}.journey-stop.missed{background:#d9b090;border-color:#d9b090}.journey-bike{position:absolute;left:0;top:-8px;transform:translateX(-50%);color:#4a7357;font-size:16px;line-height:1}
@@ -63,6 +68,7 @@
           <title id="scene-title">鹈鹕的海岸投喂</title>
           <desc id="scene-description">鹈鹕骑着珊瑚橙自行车沿海送鱼。前方有固定在岸边的喂食台与等候的小鹈鹕。用 D 踩踏，A 刹车，空格投鱼，P 暂停。弧线末端变绿表示预计落点在筐口内。</desc>
           <defs>
+            <clipPath id="sun-horizon" clipPathUnits="userSpaceOnUse"><rect x="-2000" y="-2000" width="5440" height="2448"/></clipPath>
             <g id="flying-fish" stroke="#4a6d5b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="m-14 0-16-12 2 13-2 12Z" fill="#91b3a1"/>
               <path d="M-20 0C-11-14 8-15 23-1 12 14-8 14-20 0Z" fill="#b9cfc0"/>
@@ -128,8 +134,11 @@
           </defs>
 
           <path fill="#f0f0e3" d="M-2000 0H3440v820H-2000Z"/>
-          <circle cx="1190" cy="174" r="71" fill="#efcd91"/>
-          <circle cx="1190" cy="174" r="86" fill="none" stroke="#e9cfa1" stroke-width="1" opacity=".55"/>
+          <!-- 裁切保持在世界坐标中，让移动的太阳沉入海平面后不再透出。 -->
+          <g clip-path="url(#sun-horizon)"><g id="sun">
+            <circle id="sun-disc" cx="1190" cy="174" r="71" fill="#efcd91"/>
+            <circle id="sun-halo" cx="1190" cy="174" r="86" fill="none" stroke="#e9cfa1" stroke-width="1" opacity=".55"/>
+          </g></g>
           <g id="clouds" opacity=".95">
             <use href="#cloud" x="566" y="120" transform="scale(1.2)"/>
             <use href="#cloud" x="1076" y="310" transform="scale(.78)"/>
@@ -303,7 +312,6 @@
           </g>
 
           <g id="effect-layer"></g>
-          <path id="sunset-wash" d="M-2000 0H3440v820H-2000Z" fill="#e4a765" opacity="0" pointer-events="none"/>
           <g id="foreground-plants"><use href="#road-plants" x="-1440"/><use href="#road-plants"/><use href="#road-plants" x="1440"/></g>
           <path fill="url(#paper-grain)" d="M-2000 0H3440v645H-2000Z" pointer-events="none"/>
         </svg>
@@ -335,7 +343,7 @@
       const FIXED_STEP = 1 / 120;
       const STATION_NAMES = ['海堤边的小鹈鹕', '码头边的小鹈鹕', '灯塔下的小鹈鹕', '草坡上的小鹈鹕', '海湾里的小鹈鹕', '归巢的小鹈鹕'];
       const e = {};
-      ['scene','briefing','world-note','hud','route-label','wind-label','stamina-meter','stamina-fill','speed-number','delivered-number','fish-number','score-number','time-number','delivery-tip','tip-text','toast','pause-panel','result-panel','control-help','control-small','journey-fill','journey-dots','journey-bike','station-backs','station-fronts','projectile-world','fish-layer','effect-layer','aim-path','aim-ring','bike-shadow','riding-scene','pelican','pelican-head','lower-beak','upper-beak','rear-spokes','front-spokes','chainring','crank','road-marks','island-layer','ripples','foreground-plants','clouds','scarf-long','scarf-short','eye','bird-a','bird-b','distant-birds','breeze','grove-layer','finish-layer','supply-layer','supply-label','sunset-wash'].forEach((id) => e[id] = $(id));
+      ['scene','briefing','world-note','hud','route-label','wind-label','stamina-meter','stamina-fill','speed-number','delivered-number','fish-number','score-number','time-number','delivery-tip','tip-text','toast','pause-panel','result-panel','control-help','control-small','journey-fill','journey-dots','journey-bike','station-backs','station-fronts','projectile-world','fish-layer','effect-layer','aim-path','aim-ring','bike-shadow','riding-scene','pelican','pelican-head','lower-beak','upper-beak','rear-spokes','front-spokes','chainring','crank','road-marks','island-layer','ripples','foreground-plants','clouds','scarf-long','scarf-short','eye','bird-a','bird-b','distant-birds','breeze','grove-layer','finish-layer','supply-layer','supply-label','sun','sun-disc','sun-halo'].forEach((id) => e[id] = $(id));
       const drive = { pedal: $('pedal-button'), brake: $('brake-button'), throw: $('throw-button'), pause: $('pause-button') };
       const legs = ['far', 'near'].map((side) => ({ edge: $(`${side}-leg-edge`), color: $(`${side}-leg-color`), foot: $(`${side}-foot`), pedal: $(`${side}-pedal`) }));
       const held = { pedal: new Set(), brake: new Set() };
@@ -771,6 +779,17 @@
         }
       }
 
+      function renderSunset(home) {
+        // 与倒计时共用游戏时间，暂停、结算时冻结，重新开局与返回首页时归零。
+        const progress = home ? 0 : clamp(game.time / MAX_TIME, 0, 1);
+        const nightfall = smooth((progress - .15) / .85);
+        e.sun.setAttribute('transform', `translate(${-80 * progress} ${360 * progress})`);
+        e['sun-disc'].setAttribute('fill', `rgb(239 ${Math.round(205 - 69 * progress)} ${Math.round(145 - 49 * progress)})`);
+        e['sun-halo'].setAttribute('opacity', .55 * (1 - nightfall));
+        e.scene.style.setProperty('--sunset-warmth', (.24 * Math.sin(Math.PI * progress)).toFixed(4));
+        e.scene.style.setProperty('--nightfall', nightfall.toFixed(4));
+      }
+
       function render() {
         const home = mode === 'home';
         const time = visualTime;
@@ -815,7 +834,7 @@
         const blink = time % 6.7;
         const eyeScale = !reducedMotion && blink > 5.9 && blink < 6.14 ? Math.max(.08, Math.abs((blink - 6.02) / .12)) : 1;
         e.eye.setAttribute('transform', `translate(891 249) scale(1 ${eyeScale})`);
-        e['sunset-wash'].setAttribute('opacity', home ? 0 : Math.max(0, (game.time / MAX_TIME - .65) * .2));
+        renderSunset(home);
         for (const station of game.stations) {
           const age = game.time - station.hitAt;
           const bounce = age >= 0 && age < .7 && !reducedMotion ? Math.sin(age * 21) * Math.exp(-age * 7) * 6 : 0;
